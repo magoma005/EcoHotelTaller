@@ -3,14 +3,14 @@ package modelo;
 import java.time.LocalDate;
 
 public class Reserva {
-    private int idReserva;
+    private String idReserva;
     private LocalDate fechaEntrada;
     private LocalDate fechaSalida;
     private Huesped huesped;
     private Habitacion habitacion;
 
     public Reserva(LocalDate fechaEntrada, LocalDate fechaSalida, Huesped huesped, Habitacion habitacion) {
-        this.idReserva = IDGenerator.generarID();
+        this.idReserva = IDGenerator.generateReservaId();
         setFechaEntrada(fechaEntrada);
         setFechaSalida(fechaSalida);
         this.huesped = huesped;
@@ -19,7 +19,7 @@ public class Reserva {
 
 
     // Getters y Setters con validaciones de fechas
-    public int getIdReserva() {
+    public String getIdReserva() {
         return idReserva;
     }
 
