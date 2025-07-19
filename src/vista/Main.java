@@ -1,33 +1,88 @@
 package vista;
 
-import modelo.IDGenerator;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-// Esta es una clase de prueba para verificar la generación de IDs únicos para cada entidad del sistema EcoHotel.
+// Clase principal que muestra el JFrame con su menú de navegación.
 
-public class Main {
+public class Main extends JFrame {
+
+    // Componentes globales
+    private JDesktopPane desktopPane;
+
+     //Constructor que le da inicio a la Ventana Principal
+    public Main() {
+        setTitle("EcoHotel - Refugio Natural");
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // pantalla completa
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        // Crea un desktopPane para JInternalFrames
+        desktopPane = new JDesktopPane();
+        setContentPane(desktopPane);
+
+        // Configuracion del menu
+        JMenuBar menuBar = new JMenuBar();
+
+        // Menu archivo
+        JMenu menuArchivo = new JMenu("Archivo");
+        JMenuItem itemSalir = new JMenuItem("Salir");
+        itemSalir.addActionListener(e -> System.exit(0));
+        menuArchivo.add(itemSalir);
+
+        // Menu gestion
+        JMenu menuGestion = new JMenu("Gestión");
+
+        JMenuItem itemHuesped = new JMenuItem("Huéspedes");
+        itemHuesped.addActionListener(e -> abrirFormHuesped());
+
+        JMenuItem itemHabitacion = new JMenuItem("Habitaciones");
+        itemHabitacion.addActionListener(e -> abrirFormHabitacion());
+
+        JMenuItem itemReserva = new JMenuItem("Reservas");
+        itemReserva.addActionListener(e -> abrirFormReserva());
+
+        menuGestion.add(itemHuesped);
+        menuGestion.add(itemHabitacion);
+        menuGestion.add(itemReserva);
+
+        // Agrega menús al menuBar
+        menuBar.add(menuArchivo);
+        menuBar.add(menuGestion);
+
+        setJMenuBar(menuBar);
+    }
+
+     //Método para abrir el formulario de huéspedes.
+
+    private void abrirFormHuesped() {
+        FormHuesped fh = new FormHuesped();
+        desktopPane.add(fh);
+        fh.setVisible(true);
+    }
+
+    //Método para abrir el formulario de habitaciones.
+
+    private void abrirFormHabitacion() {
+        FormHabitacion fh = new FormHabitacion();
+        desktopPane.add(fh);
+        fh.setVisible(true);
+    }
+
+    //Método para abrir el formulario de reservas.
+
+    private void abrirFormReserva() {
+        FormReserva fr = new FormReserva();
+        desktopPane.add(fr);
+        fr.setVisible(true);
+    }
+
+    //Método main para ejecutar la aplicación.
+
     public static void main(String[] args) {
-
-        // Generar y mostrar IDs de Huesped
-        System.out.println(IDGenerator.generateHuespedId()); // HUE-1
-        System.out.println(IDGenerator.generateHuespedId()); // HUE-2
-
-        // Generar y mostrar IDs de Habitacion
-        System.out.println(IDGenerator.generateHabitacionId()); // HAB-1
-        System.out.println(IDGenerator.generateHabitacionId()); // HAB-2
-
-        // Generar y mostrar IDs de Servicio adicional
-        System.out.println(IDGenerator.generateServicioId()); // SER-1
-        System.out.println(IDGenerator.generateServicioId()); // SER-2
-
-        // Generar y mostrar IDs de Reserva
-        System.out.println(IDGenerator.generateReservaId()); // RES-1
-        System.out.println(IDGenerator.generateReservaId()); // RES-2
-
-        //Llamadas múltiples para verificar incremento
-        System.out.println(IDGenerator.generateHuespedId()); // HUE-3
-        System.out.println(IDGenerator.generateHabitacionId()); // HAB-3
-        System.out.println(IDGenerator.generateServicioId()); // SER-3
-        System.out.println(IDGenerator.generateReservaId()); // RES-3
+        SwingUtilities.invokeLater(() -> {
+            Main m = new Main();
+            m.setVisible(true);
+        });
     }
 }
-
