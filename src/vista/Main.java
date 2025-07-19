@@ -1,6 +1,7 @@
 package vista;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,6 +20,7 @@ public class Main extends JFrame {
 
         // Crea un desktopPane para JInternalFrames
         desktopPane = new JDesktopPane();
+        desktopPane.setBackground(new Color(31, 31, 31)); // fondo gris
         setContentPane(desktopPane);
 
         // Configuracion del menu
