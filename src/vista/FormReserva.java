@@ -8,6 +8,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import exceptions.FechaInvalidaException;
+import exceptions.HabitacionNoDisponibleException;
+import exceptions.DatoInvalidoException;
 
 //Formulario de gestión de reservas, permite registrar y listar reservas en una tabla.
 public class FormReserva extends JInternalFrame {
@@ -96,28 +99,30 @@ public class FormReserva extends JInternalFrame {
 
             if (huesped == null || habitacion == null ||
                     fechaEntradaStr.isEmpty() || fechaSalidaStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
+                throw new exceptions.DatoInvalidoException("Todos los campos son obligatorios.");
             }
 
             LocalDate fechaEntrada = LocalDate.parse(fechaEntradaStr);
             LocalDate fechaSalida = LocalDate.parse(fechaSalidaStr);
 
-            // Validaciones de fechas
             if (fechaEntrada.isBefore(LocalDate.now())) {
-                JOptionPane.showMessageDialog(this, "La fecha de entrada no puede ser anterior a hoy.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
+                throw new FechaInvalidaException("La fecha de entrada no puede ser anterior a hoy.");
             }
             if (!fechaSalida.isAfter(fechaEntrada)) {
-                JOptionPane.showMessageDialog(this, "La fecha de salida debe ser posterior a la fecha de entrada.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
+                throw new FechaInvalidaException("La fecha de salida debe ser posterior a la fecha de entrada.");
             }
 
-            // Crear reserva
+            // Validar disponibilidad de la habitación
+            if (habitacion.getEstado().equalsIgnoreCase("Ocupada")) {
+                throw new HabitacionNoDisponibleException("La habitación seleccionada no está disponible.");
+            }
+
+            // Cambiar estado de la habitación a ocupada (en sistema real se actualizaría en BD)
+            habitacion.setEstado("Ocupada");
+
             Reserva r = new Reserva(fechaEntrada, fechaSalida, huesped, habitacion);
             listaReservas.add(r);
 
-            // Agregar a la tabla
             modeloTabla.addRow(new Object[]{
                     r.getIdReserva(),
                     huesped.getNombre(),
@@ -129,8 +134,10 @@ public class FormReserva extends JInternalFrame {
             JOptionPane.showMessageDialog(this, "Reserva guardada exitosamente.");
             limpiarCampos();
 
+        } catch (DatoInvalidoException | FechaInvalidaException | HabitacionNoDisponibleException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Validación", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Excepción", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error general: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

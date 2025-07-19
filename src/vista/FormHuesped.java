@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import exceptions.DatoInvalidoException;
 
 //Este es el formulario de gestión de huéspedes, permite registrar y listar huéspedes en una tabla.
 
@@ -71,13 +72,13 @@ public class FormHuesped extends JInternalFrame {
 
             // Validaciones
             if (nombre.isEmpty() || documento.isEmpty() || correo.isEmpty() || telefono.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
+                throw new DatoInvalidoException("Todos los campos son obligatorios.");
             }
-
+            if (!correo.contains("@")) {
+                throw new DatoInvalidoException("El correo debe contener '@'.");
+            }
             Huesped h = new Huesped(nombre, documento, correo, telefono);
             listaHuespedes.add(h);
-
             modeloTabla.addRow(new Object[]{
                     h.getIdHuesped(),
                     h.getNombre(),
@@ -85,11 +86,12 @@ public class FormHuesped extends JInternalFrame {
                     h.getCorreo(),
                     h.getTelefono()
             });
-
             JOptionPane.showMessageDialog(this, "Huésped guardado exitosamente.");
             limpiarCampos();
+        } catch (DatoInvalidoException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Dato inválido", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Excepción", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error general: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

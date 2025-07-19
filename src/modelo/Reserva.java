@@ -61,6 +61,8 @@ public class Reserva {
         this.habitacion = habitacion;
     }
 
+
+
     @Override
     public String toString() {
         return "Reserva #" + idReserva + ": " + huesped + " -> " + habitacion +
