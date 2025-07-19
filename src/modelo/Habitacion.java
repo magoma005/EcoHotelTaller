@@ -1,19 +1,29 @@
 package modelo;
 
+
+ //Esta clase representa una habitación del EcoHotel.
+
 public class Habitacion {
+    private String idHabitacion;
     private int numero;
     private String tipo;
     private int capacidad;
     private String estado; // libre, ocupada, mantenimiento
 
+    // Este constructor cuenta con un ID generado automaticamente
     public Habitacion(int numero, String tipo, int capacidad, String estado) {
+        this.idHabitacion = IDGenerator.generateHabitacionId();
         this.numero = numero;
         this.tipo = tipo;
         setCapacidad(capacidad);
         this.estado = estado;
     }
 
-    // Getters y Setters con validación
+    // Getters y Setters (sin setter para idHabitacion)
+    public String getIdHabitacion() {
+        return idHabitacion;
+    }
+
     public int getNumero() {
         return numero;
     }
@@ -52,7 +62,7 @@ public class Habitacion {
 
     @Override
     public String toString() {
-        return "Habitación " + numero + " (" + tipo + ")";
+        return "Habitación " + numero + " [" + idHabitacion + "]";
     }
 }
 

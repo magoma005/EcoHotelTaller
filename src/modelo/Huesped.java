@@ -1,19 +1,28 @@
 package modelo;
 
+ //Esta clase representa un huésped del EcoHotel.
+
 public class Huesped {
+    private String idHuesped;
     private String nombre;
     private String documento;
     private String correo;
     private String telefono;
 
+    // Este constructor cuenta con un ID generado automaticamente
     public Huesped(String nombre, String documento, String correo, String telefono) {
+        this.idHuesped = IDGenerator.generateHuespedId();
         this.nombre = nombre;
         this.documento = documento;
         setCorreo(correo);
         this.telefono = telefono;
     }
 
-    // Getters y Setters con validación
+    // Getters y Setters (no incluye setter para idHuesped)
+    public String getIdHuesped() {
+        return idHuesped;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -52,6 +61,6 @@ public class Huesped {
 
     @Override
     public String toString() {
-        return nombre + " (" + documento + ")";
+        return nombre + " (" + documento + ") [" + idHuesped + "]";
     }
 }
