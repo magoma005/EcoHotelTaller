@@ -124,6 +124,19 @@ public class FormReserva extends JInternalFrame {
                 throw new FechaInvalidaException("La fecha de salida debe ser posterior a la fecha de entrada.");
             }
 
+            // Validar superposición de reservas
+            for (Reserva r : listaReservas) {
+                if (r.getHabitacion().equals(habitacion)) {
+                    LocalDate inicioExistente = r.getFechaEntrada();
+                    LocalDate finExistente = r.getFechaSalida();
+
+                    // Verifica si los rangos se superponen
+                    if (!(fechaSalida.isBefore(inicioExistente) || fechaEntrada.isAfter(finExistente))) {
+                        throw new exceptions.ReservaDuplicadaException("Ya existe una reserva para esta habitación en esas fechas.");
+                    }
+                }
+            }
+
             // Validar disponibilidad de la habitación
             if (habitacion.getEstado().equalsIgnoreCase("Ocupada")) {
                 throw new HabitacionNoDisponibleException("La habitación seleccionada no está disponible.");
@@ -146,12 +159,13 @@ public class FormReserva extends JInternalFrame {
             JOptionPane.showMessageDialog(this, "Reserva guardada exitosamente.");
             limpiarCampos();
 
-        } catch (DatoInvalidoException | FechaInvalidaException | HabitacionNoDisponibleException e) {
+        } catch (DatoInvalidoException | FechaInvalidaException | HabitacionNoDisponibleException | exceptions.ReservaDuplicadaException e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Validación", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error general: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     //Método para actualizar huéspedes
     private void actualizarHuespedes() {
