@@ -13,12 +13,8 @@ import exceptions.HabitacionNoDisponibleException;
 import exceptions.DatoInvalidoException;
 import vista.FormHabitacion;
 
-
-
-
 //Formulario de gestión de reservas, permite registrar y listar reservas en una tabla.
 public class FormReserva extends JInternalFrame {
-
     // Componentes de la interfaz
     private JComboBox<Huesped> cbxHuesped;
     private JComboBox<Habitacion> cbxHabitacion;
@@ -27,12 +23,10 @@ public class FormReserva extends JInternalFrame {
     private JButton btnActualizarHuespedes, btnActualizarHabitaciones;
     private JTable tablaReservas;
     private DefaultTableModel modeloTabla;
-
     // Listas temporales
     private ArrayList<Reserva> listaReservas = new ArrayList<>();
     private ArrayList<Huesped> listaHuespedes = new ArrayList<>();
     private ArrayList<Habitacion> listaHabitaciones = new ArrayList<>();
-
     //Constructor que configura el formulario.
     public FormReserva() {
         setTitle("Gestión de Reservas");
@@ -40,7 +34,6 @@ public class FormReserva extends JInternalFrame {
         setMaximizable(true);
         setSize(700, 500);
         setLayout(new BorderLayout());
-
         // Panel superior
         JPanel panelForm = new JPanel(new GridLayout(7, 2, 5, 5)); // aumenté filas a 7 para el nuevo botón
         panelForm.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -56,32 +49,30 @@ public class FormReserva extends JInternalFrame {
         panelForm.add(new JLabel("Fecha Salida (AAAA-MM-DD):"));
         txtFechaSalida = new JTextField();
         panelForm.add(txtFechaSalida);
-
         btnGuardar = new JButton("Guardar");
         btnGuardar.addActionListener(e -> guardarReserva());
         panelForm.add(btnGuardar);
-
         btnLimpiar = new JButton("Limpiar");
         btnLimpiar.addActionListener(e -> limpiarCampos());
         panelForm.add(btnLimpiar);
-
         // Botón para actualizar huéspedes
         btnActualizarHuespedes = new JButton("Actualizar huéspedes");
         btnActualizarHuespedes.addActionListener(e -> actualizarHuespedes());
         panelForm.add(btnActualizarHuespedes);
-
         // Botón para actualizar habitaciones
         btnActualizarHabitaciones = new JButton("Actualizar habitaciones");
         btnActualizarHabitaciones.addActionListener(e -> actualizarHabitaciones());
         panelForm.add(btnActualizarHabitaciones);
-
         add(panelForm, BorderLayout.NORTH);
-
         // Tabla de reserva
         modeloTabla = new DefaultTableModel(new Object[]{"ID", "Huésped", "Habitación", "Entrada", "Salida"}, 0);
         tablaReservas = new JTable(modeloTabla);
         JScrollPane scroll = new JScrollPane(tablaReservas);
         add(scroll, BorderLayout.CENTER);
+        // Botón cancelar reserva
+        JButton btnCancelar = new JButton("Cancelar reserva");
+        btnCancelar.addActionListener(e -> cancelarReserva());
+        add(btnCancelar, BorderLayout.SOUTH);
         cargarDatosEjemplo();
     }
 
@@ -186,6 +177,29 @@ public class FormReserva extends JInternalFrame {
         }
         JOptionPane.showMessageDialog(this, "Habitaciones actualizadas.");
     }
+
+    private void cancelarReserva() {
+        int filaSeleccionada = tablaReservas.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            int opcion = JOptionPane.showConfirmDialog(this,
+                    "¿Estás seguro de cancelar esta reserva?",
+                    "Confirmar cancelación",
+                    JOptionPane.YES_NO_OPTION);
+            if (opcion == JOptionPane.YES_OPTION) {
+                // Obtener la reserva seleccionada
+                Reserva reserva = listaReservas.get(filaSeleccionada);
+                // Actualizar el estado de la habitación a "Libre"
+                reserva.getHabitacion().setEstado("Libre");
+                // Eliminar la reserva de la lista y tabla
+                listaReservas.remove(filaSeleccionada);
+                modeloTabla.removeRow(filaSeleccionada);
+                JOptionPane.showMessageDialog(this, "Reserva cancelada y habitación liberada.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor selecciona una reserva para cancelar.");
+        }
+    }
+
 
 
     //Método para limpiar los campos de entrada.
