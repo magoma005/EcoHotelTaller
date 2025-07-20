@@ -21,7 +21,7 @@ public class FormHuesped extends JInternalFrame {
     private DefaultTableModel modeloTabla;
 
     // Lista temporal de huéspedes
-    private ArrayList<Huesped> listaHuespedes = new ArrayList<>();
+    public static ArrayList<Huesped> listaHuespedes = new ArrayList<>();
 
     //Constructor que configura el formulario.
     public FormHuesped() {

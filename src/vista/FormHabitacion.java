@@ -18,7 +18,7 @@ public class FormHabitacion extends JInternalFrame {
     private DefaultTableModel modeloTabla;
 
     // Lista temporal de habitaciones
-    private ArrayList<Habitacion> listaHabitaciones = new ArrayList<>();
+    public static ArrayList<Habitacion> listaHabitaciones = new ArrayList<>();
 
     //Constructor que configura el formulario.
     public FormHabitacion() {
